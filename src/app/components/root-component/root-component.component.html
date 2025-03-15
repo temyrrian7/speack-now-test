@@ -1,0 +1,12 @@
+<div class="main-container">
+  <app-video-quality-selector></app-video-quality-selector>
+
+  <button (click)="startRecording()" [disabled]="recording">
+    Начать запись
+  </button>
+  <button (click)="stopRecording()" [disabled]="!recording">
+    Остановить запись
+  </button>
+
+  <app-video-list></app-video-list>
+</div>

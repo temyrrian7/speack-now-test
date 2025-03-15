@@ -1,0 +1,9 @@
+.video-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+video {
+  width: 100%;
+  max-width: 300px;
+}

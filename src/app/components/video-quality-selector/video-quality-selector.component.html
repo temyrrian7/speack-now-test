@@ -1,0 +1,8 @@
+<div class="quality-selector">
+  <button
+    *ngFor="let option of qualityOptions"
+    [ngClass]="{'active': (quality$ | async) === option.value}"
+    (click)="setQuality(option.value)">
+    {{ option.label }}
+  </button>
+</div>

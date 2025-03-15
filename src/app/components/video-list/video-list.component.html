@@ -1,0 +1,6 @@
+<div class="video-list">
+  <div *ngFor="let video of videos" class="video-item">
+    <video [src]="getVideoUrl(video.blob)" controls></video>
+    <button (click)="deleteVideo(video.id)">Удалить</button>
+  </div>
+</div>
