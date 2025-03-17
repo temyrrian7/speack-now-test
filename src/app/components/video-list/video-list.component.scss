@@ -1,9 +1,27 @@
 .video-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-}
-video {
-  width: 100%;
-  max-width: 300px;
+  gap: 16px;
+
+  .video-item {
+    display: flex;
+    flex-direction: column;
+
+    video {
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .video-info {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 14px;
+      color: #666;
+    }
+
+    button {
+      width: fit-content;
+    }
+  }
 }

@@ -1,6 +1,13 @@
 <div class="video-list">
   <div *ngFor="let video of videos" class="video-item">
     <video [src]="getVideoUrl(video.blob)" controls></video>
-    <button (click)="deleteVideo(video.id)">Удалить</button>
+
+    <div class="video-info">
+      <span>{{ video.date }}</span>
+      <span>{{ video.time }}</span>
+      <span>{{ video.duration }}s</span>
+    </div>
+
+    <button (click)="deleteVideo(video.id)">Delete</button>
   </div>
 </div>

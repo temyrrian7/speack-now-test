@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { Quality } from '../interfaces/quality.enum';
 
 @Injectable({ providedIn: 'root' })
 export class WebcamService {
   private mediaRecorder?: MediaRecorder;
   private chunks: Blob[] = [];
 
-  async startRecording(videoQuality: 'low' | 'medium' | 'high'): Promise<void> {
+  async startRecording(videoQuality: Quality): Promise<void> {
     const constraints: MediaStreamConstraints = {
       video: {
         width: videoQuality === 'low' ? 640 : videoQuality === 'medium' ? 1280 : 1920,

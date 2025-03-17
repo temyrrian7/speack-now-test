@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { VideoStorageService } from '../../services/video-storage.service';
 import { NgForOf } from '@angular/common';
+import { RecordedVideo } from '../../interfaces/video.interface';
 
 @Component({
   selector: 'app-video-list',
@@ -11,8 +12,8 @@ import { NgForOf } from '@angular/common';
   ],
   standalone: true
 })
-export class VideoListComponent {
-  videos: Array<{ id: number; blob: Blob }> = [];
+export class VideoListComponent implements OnInit {
+  videos: Array<RecordedVideo> = [];
 
   private videoStorage = inject(VideoStorageService);
 

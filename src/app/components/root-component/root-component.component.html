@@ -1,12 +1,20 @@
-<div class="main-container">
-  <app-video-quality-selector></app-video-quality-selector>
+<div class="container">
+  <section class="video-recorder-section">
+    <h2>Recorder</h2>
 
-  <button (click)="startRecording()" [disabled]="recording">
-    Начать запись
-  </button>
-  <button (click)="stopRecording()" [disabled]="!recording">
-    Остановить запись
-  </button>
+    <app-video-quality-selector></app-video-quality-selector>
 
-  <app-video-list></app-video-list>
+    <button (click)="startRecording()" [disabled]="recording">
+      Начать запись
+    </button>
+    <button (click)="stopRecording()" [disabled]="!recording">
+      Остановить запись
+    </button>
+  </section>
+
+  <section class="video-list-section">
+    <h2>Saved videos</h2>
+
+    <app-video-list></app-video-list>
+  </section>
 </div>

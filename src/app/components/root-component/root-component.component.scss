@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px;
+  height: 100vh; // вся высота экрана
+  box-sizing: border-box;
+
+  .video-recorder-section,
+  .video-list-section {
+    flex: 1;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #f4f7fb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+
+    h2 {
+      margin-bottom: 16px;
+      color: #333;
+    }
+  }
+
+  .video-list-section {
+    overflow-y: auto;
+  }
+}

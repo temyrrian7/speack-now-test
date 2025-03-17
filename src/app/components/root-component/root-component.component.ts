@@ -2,12 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { VideoStorageService } from '../../services/video-storage.service';
 import { WebcamService } from '../../services/webcam.service';
 import { Store } from '@ngxs/store';
-import { SetVideoQuality, VideoSettingsState } from '../../store/vide-settings.state';
+import { SetVideoQuality, VideoSettingsState } from '../../store/video-settings.state';
 import { Observable, timer, firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { VideoQualitySelectorComponent } from '../video-quality-selector/video-quality-selector.component';
 import { BandwidthService } from '../../services/brandwith.service';
 import { VideoListComponent } from '../video-list/video-list.component';
+import { Quality } from '../../interfaces/quality.enum';
 
 @Component({
   selector: 'app-root-component',
@@ -22,16 +23,21 @@ export class RootComponentComponent implements OnInit {
   private videoStorage = inject(VideoStorageService);
   private store = inject(Store);
 
-  quality$: Observable<string> = this.store.select(VideoSettingsState.quality);
+  quality$: Observable<Quality> = this.store.select(VideoSettingsState.quality);
   recording = false;
+  recordStartTime = 0;
 
   ngOnInit() {
     this.bandwidthService.getBandwidth().then((speed: number) => {
-      let quality: 'low' | 'medium' | 'high';
+      let quality: Quality;
 
-      if (speed < 2) quality = 'low';
-      else if (speed <= 5) quality = 'medium';
-      else quality = 'high';
+      if (speed < 2) {
+        quality = Quality.LOW;
+      } else if (speed <= 5) {
+        quality = Quality.MEDIUM;
+      } else {
+        quality = Quality.HIGH;
+      }
 
       this.store.dispatch(new SetVideoQuality(quality));
     });
@@ -39,15 +45,22 @@ export class RootComponentComponent implements OnInit {
 
   async startRecording() {
     const quality = await firstValueFrom(this.quality$);
-    await this.webcamService.startRecording(quality as 'low' | 'medium' | 'high');
+    await this.webcamService.startRecording(quality);
     this.recording = true;
+
+    // Сохраняем текущее время старта записи
+    this.recordStartTime = Date.now();
 
     timer(10000).subscribe(async () => {
       if (this.recording) {
         const videoBlob = await this.webcamService.stopRecording();
-        await this.videoStorage.saveVideo(videoBlob);
+
+        // вычисляем длительность записи в секундах
+        const duration = Math.floor((Date.now() - this.recordStartTime) / 1000);
+        await this.videoStorage.saveVideo(videoBlob, duration);
+
         this.recording = false;
-        console.log('Видео автоматически остановлено и сохранено (10 секунд).');
+        console.log('Auto stopped and saved.');
       }
     });
   }
@@ -55,8 +68,13 @@ export class RootComponentComponent implements OnInit {
   async stopRecording() {
     if (this.recording) {
       const videoBlob = await this.webcamService.stopRecording();
-      await this.videoStorage.saveVideo(videoBlob);
+
+      // вычисляем реальную длительность записи в секундах
+      const duration = Math.floor((Date.now() - this.recordStartTime) / 1000);
+
+      await this.videoStorage.saveVideo(videoBlob, duration);
       this.recording = false;
+
       console.log('Видео остановлено вручную и сохранено.');
     }
   }

@@ -1,18 +1,19 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { Quality } from '../interfaces/quality.enum';
 
 export class SetVideoQuality {
   static readonly type = '[Video] Set Quality';
-  constructor(public quality: 'low' | 'medium' | 'high') {}
+  constructor(public quality: Quality) {}
 }
 
 export interface VideoSettingsStateModel {
-  quality: 'low' | 'medium' | 'high';
+  quality: Quality;
 }
 
 @State<VideoSettingsStateModel>({
   name: 'videoSettings',
   defaults: {
-    quality: 'medium',
+    quality: Quality.MEDIUM,
   },
 })
 export class VideoSettingsState {
