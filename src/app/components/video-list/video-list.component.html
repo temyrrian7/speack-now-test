@@ -1,11 +1,12 @@
 <div class="video-list">
   <div *ngFor="let video of videos" class="video-item">
-    <video [src]="getVideoUrl(video.blob)" controls></video>
-
-    <div class="video-info">
-      <span>{{ video.date }}</span>
-      <span>{{ video.time }}</span>
-      <span>{{ video.duration }}s</span>
+    <div class="video-item" (click)="openModal(video)">
+      <img [src]="video.thumbnail" alt="Video thumbnail">
+      <div class="video-info">
+        <span>{{ video.date }}</span>
+        <span>{{ video.time }}</span>
+        <span>{{ video.duration }}s</span>
+      </div>
     </div>
 
     <button (click)="deleteVideo(video.id)">Delete</button>

@@ -1,11 +1,73 @@
-.quality-selector {
+$background-color: rgba(0, 0, 0, 0.6);
+$hover-color: rgba(255, 255, 255, 0.2);
+$selected-color: #ffffff;
+$check-color: #33AB30;
+$font-family: 'Lato', sans-serif;
+
+.settings-container {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
   display: flex;
-  gap: 8px;
+  flex-direction: column;
+  align-items: center;
+
+  .settings-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease-in-out;
+
+    img {
+      width: 60px;
+      height: 60px;
+    }
+  }
 }
-button {
-  padding: 8px 16px;
-}
-.active {
-  background-color: #007bff;
-  color: white;
+
+.quality-menu {
+  position: absolute;
+  bottom: 80px;
+  left: 0;
+  width: 280px;
+  background: $background-color;
+  backdrop-filter: blur(6px);
+  border-radius: 8px;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    font-family: $font-family;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 24px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background: $hover-color;
+    }
+
+    &.selected {
+      color: $selected-color;
+    }
+
+    .check-icon {
+      color: $check-color;
+      font-size: 20px;
+    }
+  }
 }

@@ -1,8 +1,22 @@
-<div class="quality-selector">
-  <button
-    *ngFor="let option of qualityOptions"
-    [ngClass]="{'active': (quality$ | async) === option.value}"
-    (click)="setQuality(option.value)">
-    {{ option.label }}
+<div class="settings-container">
+  <!-- Кнопка настроек -->
+  <button class="settings-button" (click)="toggleMenu()">
+    <img [ngSrc]="isMenuOpen ? '/assets/close.svg' : '/assets/settings-default.svg'"
+         (mouseenter)="hovering = true"
+         (mouseleave)="hovering = false"
+         [attr.src]="isMenuOpen ? '/assets/close.svg' : (hovering ? '/assets/settings-hover.svg' : '/assets/settings-default.svg')"
+         alt="Settings" fill>
   </button>
+
+  <!-- Меню качества -->
+  <div *ngIf="isMenuOpen" class="quality-menu">
+    <div
+      *ngFor="let option of qualityOptions"
+      [ngClass]="{'selected': (quality$ | async) === option.value}"
+      (click)="setQuality(option.value)"
+    >
+      <span class="quality-label">{{ option.label }}</span>
+      <span *ngIf="(quality$ | async) === option.value" class="check-icon">✔</span>
+    </div>
+  </div>
 </div>

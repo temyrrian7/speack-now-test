@@ -52,11 +52,11 @@ export class RootComponentComponent implements OnInit {
     this.recordStartTime = Date.now();
 
     timer(10000).subscribe(async () => {
+      console.log('timer started');
       if (this.recording) {
         const videoBlob = await this.webcamService.stopRecording();
-
-        // вычисляем длительность записи в секундах
         const duration = Math.floor((Date.now() - this.recordStartTime) / 1000);
+
         await this.videoStorage.saveVideo(videoBlob, duration);
 
         this.recording = false;

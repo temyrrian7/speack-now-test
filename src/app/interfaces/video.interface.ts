@@ -4,4 +4,5 @@ export interface RecordedVideo {
   date: string;
   time: string;
   duration: number;
+  thumbnail: string;
 }
