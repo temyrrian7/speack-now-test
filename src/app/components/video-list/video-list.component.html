@@ -1,6 +1,6 @@
 <div class="video-list">
-  <div *ngFor="let video of videos" class="video-item" (click)="openModal(video)">
-      <img [src]="video.thumbnail" alt="Video thumbnail">
+  <div *ngFor="let video of videos" class="video-item" (click)="openModal(video)" >
+      <img [ngSrc]="video.thumbnail" alt="Video thumbnail" fill>
       <div class="video-info">
         <span>{{ video.date }}</span>
         <span>{{ video.time }}</span>

@@ -1,7 +1,7 @@
 <div class="record-button" [ngClass]="{ 'recording': isRecording }" (click)="toggleRecording()">
   <div class="record-icon">
-    <img *ngIf="!isRecording" ngSrc="/assets/record-default.svg" alt="Record" width="60" height="60">
-    <img *ngIf="isRecording" ngSrc="/assets/stop-default.svg" alt="Stop" width="60" height="60">
+    <app-icon *ngIf="!isRecording" name="record-default" [size]="60"/>
+    <app-icon *ngIf="isRecording" name="stop-default" [size]="60"/>
   </div>
 
   <div *ngIf="isRecording" class="record-timer">

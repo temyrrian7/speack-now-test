@@ -1,8 +1,4 @@
-$background-color: rgba(0, 0, 0, 0.6);
-$hover-color: rgba(255, 255, 255, 0.2);
-$selected-color: #ffffff;
-$check-color: #33AB30;
-$font-family: 'Lato', sans-serif;
+@use 'variables' as *;
 
 .settings-container {
   position: absolute;
@@ -30,9 +26,9 @@ $font-family: 'Lato', sans-serif;
 
 .quality-menu {
   position: absolute;
-  bottom: 80px;
+  bottom: 100px;
   left: 0;
-  width: 280px;
+  min-width: 280px;
   background: $background-color;
   backdrop-filter: blur(6px);
   border-radius: 8px;
@@ -61,11 +57,6 @@ $font-family: 'Lato', sans-serif;
 
     &.selected {
       color: $selected-color;
-    }
-
-    .check-icon {
-      color: $check-color;
-      font-size: 20px;
     }
   }
 }

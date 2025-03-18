@@ -4,6 +4,7 @@ import { SetVideoQuality, VideoSettingsState } from '../../store/video-settings.
 import { Observable } from 'rxjs';
 import { Quality } from '../../interfaces/quality.enum';
 import { AsyncPipe, NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-video-quality-selector',
@@ -14,7 +15,8 @@ import { AsyncPipe, NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/co
     AsyncPipe,
     NgIf,
     NgForOf,
-    NgOptimizedImage
+    NgOptimizedImage,
+    IconComponent
   ],
   standalone: true
 })

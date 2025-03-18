@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-record-button',
@@ -8,7 +9,7 @@ import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
   imports: [
     NgClass,
     NgIf,
-    NgOptimizedImage
+    IconComponent
   ],
   styleUrls: ['./record-button.component.scss']
 })

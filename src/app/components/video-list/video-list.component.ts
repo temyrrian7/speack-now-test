@@ -11,6 +11,7 @@ import { VideoModalComponent } from '../modal-container/modal-container.componen
   styleUrl: './video-list.component.scss',
   imports: [
     NgForOf,
+    NgOptimizedImage,
   ],
   standalone: true
 })
