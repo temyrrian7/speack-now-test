@@ -1,0 +1,13 @@
+<div class="record-button" [ngClass]="{ 'recording': isRecording }" (click)="toggleRecording()">
+  <div class="record-icon">
+    <img *ngIf="!isRecording" ngSrc="/assets/record-default.svg" alt="Record" width="60" height="60">
+    <img *ngIf="isRecording" ngSrc="/assets/stop-default.svg" alt="Stop" width="60" height="60">
+  </div>
+
+  <div *ngIf="isRecording" class="record-timer">
+    <div class="progress-bar">
+      <div class="progress-fill" [style.width.%]="progress"></div>
+    </div>
+    <span>{{ elapsedTime.toFixed(1) }}s</span>
+  </div>
+</div>

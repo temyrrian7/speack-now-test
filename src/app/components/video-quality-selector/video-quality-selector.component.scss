@@ -16,17 +16,15 @@ $font-family: 'Lato', sans-serif;
     background: none;
     border: none;
     cursor: pointer;
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
+    background: $background-color;
+    backdrop-filter: blur(6px);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.3s ease-in-out;
-
-    img {
-      width: 60px;
-      height: 60px;
-    }
   }
 }
 

@@ -1,20 +1,24 @@
 <div class="container">
+
+  <!-- Видео с камеры во время записи -->
   <section class="video-recorder-section">
-    <h2>Recorder</h2>
+    <video
+      #recordingVideo
+      [hidden]="!recording"
+      autoplay
+      muted>
+    </video>
 
     <app-video-quality-selector></app-video-quality-selector>
 
-    <button (click)="startRecording()" [disabled]="recording">
-      Начать запись
-    </button>
-    <button (click)="stopRecording()" [disabled]="!recording">
-      Остановить запись
-    </button>
+    <app-record-button
+      class="record-button"
+      (recordingStarted)="startRecording()"
+      (recordingStopped)="stopRecording()">
+    </app-record-button>
   </section>
 
   <section class="video-list-section">
-    <h2>Saved videos</h2>
-
     <app-video-list></app-video-list>
   </section>
 </div>

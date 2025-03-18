@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { VideoStorageService } from '../../services/video-storage.service';
-import { NgForOf } from '@angular/common';
+import { NgForOf, NgOptimizedImage } from '@angular/common';
 import { RecordedVideo } from '../../interfaces/video.interface';
 import { ModalService } from '../../services/modal.service';
 import { VideoModalComponent } from '../modal-container/modal-container.component';
@@ -10,7 +10,7 @@ import { VideoModalComponent } from '../modal-container/modal-container.componen
   templateUrl: './video-list.component.html',
   styleUrl: './video-list.component.scss',
   imports: [
-    NgForOf
+    NgForOf,
   ],
   standalone: true
 })

@@ -1,14 +1,12 @@
 <div class="video-list">
-  <div *ngFor="let video of videos" class="video-item">
-    <div class="video-item" (click)="openModal(video)">
+  <div *ngFor="let video of videos" class="video-item" (click)="openModal(video)">
       <img [src]="video.thumbnail" alt="Video thumbnail">
       <div class="video-info">
         <span>{{ video.date }}</span>
         <span>{{ video.time }}</span>
         <span>{{ video.duration }}s</span>
       </div>
-    </div>
 
-    <button (click)="deleteVideo(video.id)">Delete</button>
+    <button class="button-delete" (click)="deleteVideo(video.id)">Delete</button>
   </div>
 </div>
