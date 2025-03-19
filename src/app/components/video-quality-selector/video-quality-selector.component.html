@@ -1,12 +1,6 @@
 <div class="settings-container">
   <button class="settings-button" (click)="toggleMenu()">
-    <img [ngSrc]="isMenuOpen ? '/assets/close.svg' : '/assets/settings-default.svg'"
-         (mouseenter)="hovering = true"
-         (mouseleave)="hovering = false"ʼ
-          width="40"
-          height="40"
-         [attr.src]="isMenuOpen ? '/assets/close.svg' : (hovering ? '/assets/settings-hover.svg' : '/assets/settings-default.svg')"
-         alt="Settings">
+    <app-icon class="icon" [name]="isMenuOpen ? 'close' : 'settings-default'" [size]="40"/>
   </button>
 
   <div *ngIf="isMenuOpen" class="quality-menu">

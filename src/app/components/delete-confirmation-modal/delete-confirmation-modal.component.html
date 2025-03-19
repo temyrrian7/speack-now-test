@@ -1,11 +1,14 @@
 <div class="modal-overlay" (click)="closeModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     <button class="close-button" (click)="closeModal()">
-      <app-icon name="close" [size]="24"></app-icon>
+      <app-icon name="close-gray" [size]="24"></app-icon>
     </button>
-    <app-icon name="exclamation-circle" [size]="40" class="warning-icon"></app-icon>
+
+    <app-icon name="exclamation-circle" [size]="40" class="warning-icon"/>
+
     <h3>Delete this video?</h3>
     <p>Are you sure you want to delete this video? This action cannot be undone.</p>
+
     <div class="button-group">
       <button class="cancel-button" (click)="closeModal()">Cancel</button>
       <button class="delete-button" (click)="confirmDelete()">Delete video</button>

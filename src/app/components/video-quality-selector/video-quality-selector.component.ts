@@ -23,7 +23,6 @@ import { IconComponent } from '../icon/icon.component';
 export class VideoQualitySelectorComponent {
   quality$: Observable<string>;
   isMenuOpen = false;
-  hovering = false;
 
   qualityOptions = [
     { value: Quality.LOW,
