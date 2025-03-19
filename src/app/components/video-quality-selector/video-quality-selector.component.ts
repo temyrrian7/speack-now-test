@@ -26,9 +26,18 @@ export class VideoQualitySelectorComponent {
   hovering = false;
 
   qualityOptions = [
-    { value: Quality.LOW, label: '360p (Low Quality)' },
-    { value: Quality.MEDIUM, label: '720p (Medium Quality)' },
-    { value: Quality.HIGH, label: '1080p (High Quality)' }
+    { value: Quality.LOW,
+      resolution: '360p',
+      label: '(Low Quality)'
+    },
+    { value: Quality.MEDIUM,
+      resolution: '720p',
+      label: '(Medium Quality)'
+    },
+    { value: Quality.HIGH,
+      resolution: '1080p',
+      label: '(High Quality)'
+    }
   ];
 
   constructor(private store: Store) {

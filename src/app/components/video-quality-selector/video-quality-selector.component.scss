@@ -43,8 +43,6 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    font-family: $font-family;
-    font-weight: 900;
     font-size: 20px;
     line-height: 24px;
     color: rgba(255, 255, 255, 0.6);
@@ -57,6 +55,15 @@
 
     &.selected {
       color: $selected-color;
+    }
+
+    .bold {
+      font-weight: 900;
+    }
+
+    .normal {
+      font-weight: 400; /* Обычный вес */
+      color: rgba(255, 255, 255, 0.5); /* Более приглушенный цвет */
     }
   }
 }

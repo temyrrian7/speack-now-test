@@ -1,9 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { VideoStorageService } from '../../services/video-storage.service';
-import { NgForOf, NgOptimizedImage } from '@angular/common';
+import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { RecordedVideo } from '../../interfaces/video.interface';
 import { ModalService } from '../../services/modal.service';
 import { VideoModalComponent } from '../modal-container/modal-container.component';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-video-list',
@@ -11,7 +12,8 @@ import { VideoModalComponent } from '../modal-container/modal-container.componen
   styleUrl: './video-list.component.scss',
   imports: [
     NgForOf,
-    NgOptimizedImage,
+    IconComponent,
+    NgIf,
   ],
   standalone: true
 })
@@ -33,7 +35,8 @@ export class VideoListComponent implements OnInit {
     return URL.createObjectURL(blob);
   }
 
-  async deleteVideo(id: number) {
+  async deleteVideo(id: number, event: Event) {
+    event.stopPropagation();
     await this.videoStorage.deleteVideo(id);
     this.videos = this.videos.filter(video => video.id !== id);
   }

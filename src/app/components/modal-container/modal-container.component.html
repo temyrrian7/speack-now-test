@@ -1,0 +1,26 @@
+<div class="modal-content">
+  <button class="close-button" (click)="closeModal()">
+    <app-icon name="close" [size]="24"></app-icon>
+  </button>
+
+  <video #videoPlayer [src]="videoSrc" (timeupdate)="updateProgress()" (loadedmetadata)="updateDuration()">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="video-controls">
+    <button (click)="togglePlay()">
+      <app-icon [name]="isPlaying ? 'pause' : 'play'" [size]="24"></app-icon>
+    </button>
+
+    <span>{{ formatTime(currentTime) }}</span>
+
+    <input
+      type="range"
+      class="progress-bar"
+      [value]="progress"
+      (input)="seekTo($event)"
+    />
+
+    <span>{{ formatTime(duration) }}</span>
+  </div>
+</div>

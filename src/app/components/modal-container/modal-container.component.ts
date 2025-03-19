@@ -1,70 +1,79 @@
-import { Component, inject, Input } from '@angular/core';
-import { ModalService } from '../../services/modal.service';
+import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { IconComponent } from '../icon/icon.component';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-video-modal',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="modal-overlay">
-      <div class="modal-content">
-        <video [src]="videoSrc" controls autoplay></video>
-        <button class="close-btn" (click)="close()">×</button>
-      </div>
-    </div>
-  `,
-  styles: [`
-
-    :host {
-      display: block;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.6);
-      z-index: 1000;
-
-      .modal-content {
-        position: relative;
-        background: white;
-        border-radius: 12px;
-        padding: 16px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-
-        video {
-          width: 100%;
-          max-width: 600px;
-          border-radius: 8px;
-        }
-
-        .close-btn {
-          position: absolute;
-          top: 8px;
-          right: 12px;
-          background: none;
-          border: none;
-          font-size: 24px;
-          cursor: pointer;
-          color: #555;
-        }
-      }
-    }
-  `]
+  imports: [CommonModule, IconComponent],
+  templateUrl: './modal-container.component.html',
+  styleUrl: './modal-container.component.scss'
 })
 export class VideoModalComponent {
-  videoSrc!: string;
+  private readonly modalService = inject(ModalService);
 
-  private modalService = inject(ModalService);
+  @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
+  @Input() videoSrc!: string; // Теперь видео передаётся из родителя
 
-  close() {
+  isPlaying = false;
+  progress = 0;
+  currentTime = 0;
+  duration = 0;
+
+  togglePlay() {
+    const video = this.videoPlayer.nativeElement;
+    if (video.paused) {
+      video.play();
+      this.isPlaying = true;
+    } else {
+      video.pause();
+      this.isPlaying = false;
+    }
+  }
+
+  updateProgress() {
+    const video = this.videoPlayer.nativeElement;
+    this.currentTime = video.currentTime;
+    this.progress = (video.currentTime / (video.duration || 1)) * 100; // Предотвращает деление на 0
+  }
+
+  updateDuration() {
+    const video = this.videoPlayer.nativeElement;
+
+    if (video.readyState >= 2) { // READY_STATE = HAVE_CURRENT_DATA
+      this.duration = isFinite(video.duration) ? video.duration : 0;
+    } else {
+      video.addEventListener('loadeddata', () => {
+        this.duration = isFinite(video.duration) ? video.duration : 0;
+      });
+    }
+  }
+
+  seekTo(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const video = this.videoPlayer.nativeElement;
+    video.currentTime = (parseFloat(input.value) / 100) * (video.duration || 1);
+  }
+
+  closeModal(event?: Event) {
+    if (event) event.stopPropagation();
+
+    // Останавливаем воспроизведение
+    this.isPlaying = false;
+    this.videoPlayer.nativeElement.pause();
+
+    // Сбрасываем текущую позицию видео
+    this.videoPlayer.nativeElement.currentTime = 0;
+
+    // Закрываем модалку через сервис
     this.modalService.close();
+  }
+
+  formatTime(seconds: number): string {
+    if (!seconds || isNaN(seconds)) return '00:00';
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
   }
 }

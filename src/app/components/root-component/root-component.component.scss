@@ -2,6 +2,8 @@
 
 .container {
   display: flex;
+  gap: 12px;
+  padding: 12px ;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
@@ -11,8 +13,13 @@
   display: flex;
   width: 75%;
   position: relative;
-  background: $background-color;
   overflow: hidden;
+}
+
+.video-recorder-section,
+.video-list-section {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.8));
+  border-radius: 8px;
 }
 
 .record-button {
@@ -28,11 +35,9 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background: rgba(50, 50, 50, 0.8);
   overflow-y: auto;
 }
 
-/* Видео */
 video {
   width: 100%;
   height: 100%;

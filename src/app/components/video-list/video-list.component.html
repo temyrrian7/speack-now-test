@@ -1,12 +1,24 @@
 <div class="video-list">
-  <div *ngFor="let video of videos" class="video-item" (click)="openModal(video)" >
-      <img [ngSrc]="video.thumbnail" alt="Video thumbnail" fill>
-      <div class="video-info">
-        <span>{{ video.date }}</span>
-        <span>{{ video.time }}</span>
-        <span>{{ video.duration }}s</span>
-      </div>
+  <div *ngFor="let video of videos" class="video-item" (click)="openModal(video)">
+    <img [src]="video.thumbnail" alt="Video thumbnail"/>
+    <div class="video-info">
+      <span>{{ video.date }}</span>
+      <span>{{ video.time }}</span>
+      <span>{{ video.duration }}s</span>
+    </div>
 
-    <button class="button-delete" (click)="deleteVideo(video.id)">Delete</button>
+    <app-icon
+      class="button-delete"
+      name="delete-default"
+      (click)="deleteVideo(video.id, $event)"
+      [size]="20"
+    />
   </div>
+
+  <!-- Плейсхолдер, если нет видео -->
+</div>
+
+<div *ngIf="videos.length === 0" class="placeholder">
+  <app-icon name="video-camera" [size]="40"/>
+  <p>No videos recorded yet</p>
 </div>

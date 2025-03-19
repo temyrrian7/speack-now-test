@@ -15,10 +15,14 @@
       [ngClass]="{'selected': (quality$ | async) === option.value}"
       (click)="setQuality(option.value)"
     >
-      <span class="quality-label">{{ option.label }}</span>
+      <span>
+      <span class="bold">{{ option.resolution }}</span>
+      <span class="normal"> {{ option.label }}</span>
+        </span>
+
       <span *ngIf="(quality$ | async) === option.value">
-        <app-icon name="check" [size]="20"/>
-      </span>
+      <app-icon name="check" [size]="20"/>
+    </span>
     </div>
   </div>
 </div>
