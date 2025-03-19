@@ -86,11 +86,6 @@ export class VideoStorageService {
     return id;
   }
 
-  async getVideos(): Promise<RecordedVideo[]> {
-    const db = await this.dbPromise;
-    return await db.getAll('videos');
-  }
-
   async deleteVideo(id: number): Promise<void> {
     const db = await this.dbPromise;
     await db.delete('videos', id);
