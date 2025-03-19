@@ -7,8 +7,8 @@ import { ModalService } from '../../services/modal.service';
   selector: 'app-video-modal',
   standalone: true,
   imports: [CommonModule, IconComponent],
-  templateUrl: './modal-container.component.html',
-  styleUrl: './modal-container.component.scss'
+  templateUrl: './video-modal.component.html',
+  styleUrl: './video-modal.component.scss'
 })
 export class VideoModalComponent {
   private readonly modalService = inject(ModalService);

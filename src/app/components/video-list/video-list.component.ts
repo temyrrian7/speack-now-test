@@ -1,11 +1,12 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ComponentRef, inject, OnInit } from '@angular/core';
 import { VideoStorageService } from '../../services/video-storage.service';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { RecordedVideo } from '../../interfaces/video.interface';
 import { ModalService } from '../../services/modal.service';
-import { VideoModalComponent } from '../modal-container/modal-container.component';
+import { Observable, take } from 'rxjs';
 import { IconComponent } from '../icon/icon.component';
-import { Observable } from 'rxjs';
+import { DeleteConfirmationComponent } from '../delete-confirmation-modal/delete-confirmation-modal.component';
+import { VideoModalComponent } from '../video-modal/video-modal.component';
 
 @Component({
   selector: 'app-video-list',
@@ -26,7 +27,15 @@ export class VideoListComponent {
 
   async deleteVideo(id: number, event: Event) {
     event.stopPropagation();
-    await this.videoStorage.deleteVideo(id);
+    const componentRef$: ComponentRef<DeleteConfirmationComponent> = await this.modalService.open(DeleteConfirmationComponent, {});
+
+    componentRef$.instance.deleteConfirmed
+      .pipe(take(1))
+      .subscribe(async (result) => {
+        if (result) {
+          await this.videoStorage.deleteVideo(id);
+        }
+      });
   }
 
   openModal(video: RecordedVideo) {

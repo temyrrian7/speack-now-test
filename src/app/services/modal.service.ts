@@ -13,7 +13,7 @@ export class ModalService {
 
   private modalRef?: ComponentRef<any>;
 
-  open<T>(component: new (...args: any) => T, props?: Partial<T>): void {
+  open<T>(component: new (...args: any) => T, props?: Partial<T>): ComponentRef<any> {
     // close if already opened
     this.close();
 
@@ -31,6 +31,7 @@ export class ModalService {
       .rootNodes[0] as HTMLElement;
 
     document.body.appendChild(domElem);
+    return this.modalRef;
   }
 
   close() {

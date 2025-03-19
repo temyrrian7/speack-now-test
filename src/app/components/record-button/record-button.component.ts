@@ -21,6 +21,7 @@ export class RecordButtonComponent implements OnDestroy {
   isRecording = false;
   progress = 0;
   elapsedTime = 0;
+
   private subscription: Subscription | null = null;
 
   async toggleRecording() {
