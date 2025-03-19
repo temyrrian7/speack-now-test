@@ -1,4 +1,4 @@
-import { Component, ComponentRef, inject, OnInit } from '@angular/core';
+import { Component, ComponentRef, inject } from '@angular/core';
 import { VideoStorageService } from '../../services/video-storage.service';
 import { AsyncPipe, NgForOf, NgIf } from '@angular/common';
 import { RecordedVideo } from '../../interfaces/video.interface';
@@ -40,6 +40,6 @@ export class VideoListComponent {
 
   openModal(video: RecordedVideo) {
     const videoUrl = URL.createObjectURL(video.blob);
-    this.modalService.open(VideoModalComponent, { videoSrc: videoUrl });
+    this.modalService.open(VideoModalComponent, {videoSrc: videoUrl, duration: video.duration});
   }
 }

@@ -1,4 +1,4 @@
-@use  'variables' as *;
+@use 'variables' as *;
 
 .modal-overlay {
   position: fixed;
@@ -57,6 +57,7 @@ video {
   justify-content: space-between;
   width: 50%;
   max-width: 500px;
+  min-width: 285px;
   padding: 10px;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(6px);

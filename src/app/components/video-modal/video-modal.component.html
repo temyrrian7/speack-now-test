@@ -4,21 +4,23 @@
       <app-icon name="close" [size]="24"></app-icon>
     </button>
 
-    <video #videoPlayer [src]="videoSrc" (timeupdate)="updateProgress()" (loadedmetadata)="updateDuration()">
+    <video #videoPlayer
+           [src]="videoSrc"
+           (timeupdate)="currentTime.set(videoPlayer.currentTime); progress.set((videoPlayer.currentTime / (videoPlayer.duration || 1)) * 100)">
       Your browser does not support the video tag.
     </video>
 
     <div class="video-controls">
       <button (click)="togglePlay()">
-        <app-icon [name]="isPlaying ? 'pause' : 'play'" [size]="24"></app-icon>
+        <app-icon [name]="isPlaying() ? 'pause' : 'play'" [size]="24"></app-icon>
       </button>
 
-      <span>{{ formatTime(currentTime) }}</span>
+      <span>{{ formatTime(currentTime()) }}</span>
 
       <input
         type="range"
         class="progress-bar"
-        [value]="progress"
+        [value]="progress()"
         (input)="seekTo($event)"
       />
 

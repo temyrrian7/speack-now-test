@@ -1,4 +1,14 @@
-import { Component, ElementRef, HostListener, inject, Input, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  inject,
+  Input,
+  OnDestroy,
+  signal,
+  ViewChild
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { ModalService } from '../../services/modal.service';
@@ -10,12 +20,15 @@ import { ModalService } from '../../services/modal.service';
   templateUrl: './video-modal.component.html',
   styleUrl: './video-modal.component.scss'
 })
-export class VideoModalComponent {
-  private readonly modalService = inject(ModalService);
-
+export class VideoModalComponent implements AfterViewInit, OnDestroy {
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
-
   @Input() videoSrc!: string;
+  @Input() duration!: number;
+  isPlaying = signal(false);
+  progress = signal(0);
+  currentTime = signal(0);
+  private readonly modalService = inject(ModalService);
+  private animationFrameId?: number;
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -27,62 +40,76 @@ export class VideoModalComponent {
     }
   }
 
-  isPlaying = false;
-  progress = 0;
-  currentTime = 0;
-  duration = 0;
+  ngAfterViewInit() {
+    this.animationLoop();
+  }
 
   togglePlay() {
+    if (!this.videoPlayer) return;
+
     const video = this.videoPlayer.nativeElement;
     if (video.paused) {
       video.play();
-      this.isPlaying = true;
+      this.isPlaying.set(true);
     } else {
       video.pause();
-      this.isPlaying = false;
-    }
-  }
-
-  updateProgress() {
-    const video = this.videoPlayer.nativeElement;
-    this.currentTime = video.currentTime;
-    this.progress = (video.currentTime / (video.duration || 1)) * 100; // Предотвращает деление на 0
-  }
-
-  updateDuration() {
-    const video = this.videoPlayer.nativeElement;
-
-    if (video.readyState >= 2) { // READY_STATE = HAVE_CURRENT_DATA
-      this.duration = isFinite(video.duration) ? video.duration : 0;
-    } else {
-      video.addEventListener('loadeddata', () => {
-        this.duration = isFinite(video.duration) ? video.duration : 0;
-      });
+      this.isPlaying.set(false);
     }
   }
 
   seekTo(event: Event) {
+    if (!this.videoPlayer) return;
+
     const input = event.target as HTMLInputElement;
     const video = this.videoPlayer.nativeElement;
-    video.currentTime = (parseFloat(input.value) / 100) * (video.duration || 1);
+    const seekTime = (parseFloat(input.value) / 100) * this.duration;
+
+    if (isFinite(seekTime) && this.duration > 0) {
+      video.currentTime = seekTime;
+      this.progress.set((seekTime / this.duration) * 100);
+    }
   }
 
   closeModal(event?: Event) {
-    if (event) event.stopPropagation();
+    if (event) {
+      event.stopPropagation();
+    }
 
-    this.isPlaying = false;
-    this.videoPlayer.nativeElement.pause();
+    if (this.videoPlayer) {
+      const video = this.videoPlayer.nativeElement;
+      video.pause();
+      video.currentTime = 0;
+    }
 
-    this.videoPlayer.nativeElement.currentTime = 0;
+    this.isPlaying.set(false);
     this.modalService.close();
   }
 
   formatTime(seconds: number): string {
-    if (!seconds || isNaN(seconds)) return '00:00';
+    if (!isFinite(seconds) || seconds < 0) return '00:00';
 
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
-
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
+  }
+
+  ngOnDestroy() {
+    if (this.animationFrameId) {
+      cancelAnimationFrame(this.animationFrameId);
+    }
+  }
+
+  private animationLoop() {
+    if (!this.videoPlayer) return;
+    const video = this.videoPlayer.nativeElement;
+
+    if (!video.paused) {
+      this.currentTime.set(video.currentTime);
+    }
+
+    this.progress.set((this.currentTime() / (this.duration || 1)) * 100);
+
+    // requestAnimationFrame for smooth progress bar updates
+    this.animationFrameId = requestAnimationFrame(() => this.animationLoop());
   }
 }

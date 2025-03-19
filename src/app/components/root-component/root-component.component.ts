@@ -1,9 +1,9 @@
-import { Component, ElementRef, inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { VideoStorageService } from '../../services/video-storage.service';
 import { WebcamService } from '../../services/webcam.service';
 import { Store } from '@ngxs/store';
 import { SetVideoQuality, VideoSettingsState } from '../../store/video-settings.state';
-import { Observable, timer, firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable, timer } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { VideoQualitySelectorComponent } from '../video-quality-selector/video-quality-selector.component';
 import { BandwidthService } from '../../services/brandwith.service';
@@ -19,16 +19,14 @@ import { RecordButtonComponent } from '../record-button/record-button.component'
   standalone: true,
 })
 export class RootComponentComponent implements OnInit {
+  @ViewChild('recordingVideo') recordingVideo!: ElementRef<HTMLVideoElement>;
+  recording = false;
+  recordStartTime = 0;
   private bandwidthService = inject(BandwidthService);
   private webcamService = inject(WebcamService);
   private videoStorage = inject(VideoStorageService);
   private store = inject(Store);
-
-  @ViewChild('recordingVideo') recordingVideo!: ElementRef<HTMLVideoElement>;
-
   quality$: Observable<Quality> = this.store.select(VideoSettingsState.quality);
-  recording = false;
-  recordStartTime = 0;
 
   private mediaStream!: MediaStream;
 
@@ -56,7 +54,7 @@ export class RootComponentComponent implements OnInit {
     this.recordStartTime = Date.now();
 
     try {
-      this.mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      this.mediaStream = await navigator.mediaDevices.getUserMedia({video: true, audio: false});
       this.recordingVideo.nativeElement.srcObject = this.mediaStream;
       await this.recordingVideo.nativeElement.play();
     } catch (error) {

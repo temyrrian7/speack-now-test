@@ -1,9 +1,6 @@
 @use 'variables' as *;
 
 .settings-container {
-  position: absolute;
-  bottom: 40px;
-  left: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;

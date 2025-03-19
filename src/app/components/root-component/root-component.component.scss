@@ -2,24 +2,64 @@
 
 .container {
   display: flex;
+  flex-direction: row;
   gap: 12px;
-  padding: 12px ;
+  padding: 12px;
   width: 100vw;
+  min-width: 400px;
   height: 100vh;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: auto;
+  }
 }
 
 .video-recorder-section {
   display: flex;
-  width: 75%;
+  flex: 3;
   position: relative;
   overflow: hidden;
+  border-radius: 8px;
+
+  .settings-button {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+
+    @media (max-width: 576px) {
+      top: 30px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex: none;
+    width: 100%;
+    height: 60vh;
+  }
+}
+
+.video-list-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    flex: none;
+    width: 100%;
+    height: auto;
+  }
 }
 
 .video-recorder-section,
 .video-list-section {
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.8));
-  border-radius: 8px;
 }
 
 .record-button {
@@ -27,15 +67,6 @@
   bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
-}
-
-.video-list-section {
-  width: 25%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  overflow-y: auto;
 }
 
 video {
