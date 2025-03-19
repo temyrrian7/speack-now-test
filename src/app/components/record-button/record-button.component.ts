@@ -20,12 +20,11 @@ export class RecordButtonComponent implements OnDestroy {
 
   isRecording = false;
   progress = 0;
-  elapsedTime = 0; // Добавлено для отображения времени записи
+  elapsedTime = 0;
   private subscription: Subscription | null = null;
 
   async toggleRecording() {
-    const hasAccess = await this.hasCameraAccess();
-    if (!hasAccess) {
+    if (!await this.hasCameraAccess()) {
       alert("Camera access denied by user");
       return;
     }
@@ -40,10 +39,11 @@ export class RecordButtonComponent implements OnDestroy {
   async hasCameraAccess(): Promise<boolean> {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-      stream.getTracks().forEach(track => track.stop()); // Останавливаем поток сразу
+      stream.getTracks().forEach(track => track.stop());
       return true;
     } catch (error) {
-      return false; // Если ошибка, значит нет доступа
+      console.error('Error accessing camera:', error);
+      return false;
     }
   }
 
@@ -70,6 +70,6 @@ export class RecordButtonComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subscription?.unsubscribe(); // Очистка при уничтожении компонента
+    this.subscription?.unsubscribe();
   }
 }

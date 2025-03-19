@@ -18,7 +18,7 @@ export class VideoStorageService {
       },
     });
 
-    this.loadVideos(); // Загружаем видео при старте
+    this.loadVideos();
   }
 
   private async loadVideos() {
@@ -33,7 +33,7 @@ export class VideoStorageService {
       const canvas = document.createElement('canvas');
 
       video.src = URL.createObjectURL(blob);
-      video.currentTime = 0.5; // Берём кадр на 0.5 секунде
+      video.currentTime = 1;
 
       video.addEventListener('loadeddata', () => {
         canvas.width = video.videoWidth;
@@ -52,7 +52,7 @@ export class VideoStorageService {
               reader.onloadend = () => resolve(reader.result as string);
             } else {
               console.error('Failed to generate thumbnail blob');
-              resolve(''); // fallback: возвращаем пустую строку
+              resolve('');
             }
           }, 'image/jpeg');
         } else {
@@ -80,7 +80,6 @@ export class VideoStorageService {
     const newVideo: RecordedVideo = { id, blob, date, time, duration, thumbnail };
     await db.put('videos', newVideo);
 
-    // Обновляем состояние списка видео
     const updatedVideos = [...this.videosSubject.value, newVideo];
     this.videosSubject.next(updatedVideos);
 
@@ -96,7 +95,6 @@ export class VideoStorageService {
     const db = await this.dbPromise;
     await db.delete('videos', id);
 
-    // Убираем удаленное видео из списка
     const updatedVideos = this.videosSubject.value.filter(video => video.id !== id);
     this.videosSubject.next(updatedVideos);
   }
