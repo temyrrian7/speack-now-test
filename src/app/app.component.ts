@@ -8,9 +8,7 @@ import { RootComponentComponent } from './components/root-component/root-compone
   standalone: true,
   imports: [
     RootComponentComponent,
-    RootComponentComponent,
   ]
 })
 export class AppComponent {
-  title = 'speak-now-test';
 }

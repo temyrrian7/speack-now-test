@@ -46,3 +46,5 @@ So, decisions I made:
 │   └── app.module.ts
 ```
 4) Storage. IndexedDB --> good for big amount of data, obvious choice 
+5) Modals. I made them by myself because I can, but I would use Angular Material in real life project. Alo there is two separate modals component, but better to have modal container and project content inside.
+6) BandwidthService. Probably there is better way to do this.
