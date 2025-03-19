@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { openDB, IDBPDatabase } from 'idb';
 import { RecordedVideo } from '../interfaces/video.interface';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class VideoStorageService {
   private dbPromise: Promise<IDBPDatabase>;
+  private videosSubject = new BehaviorSubject<RecordedVideo[]>([]);
+  videos$ = this.videosSubject.asObservable();
 
   constructor() {
     this.dbPromise = openDB('video-recorder-db', 1, {
@@ -14,6 +17,14 @@ export class VideoStorageService {
         }
       },
     });
+
+    this.loadVideos(); // Загружаем видео при старте
+  }
+
+  private async loadVideos() {
+    const db = await this.dbPromise;
+    const videos = await db.getAll('videos');
+    this.videosSubject.next(videos);
   }
 
   async generateThumbnail(blob: Blob): Promise<string> {
@@ -66,7 +77,13 @@ export class VideoStorageService {
     const thumbnail = await this.generateThumbnail(blob);
     const id = Date.now();
 
-    await db.put('videos', { id, blob, date, time, duration, thumbnail });
+    const newVideo: RecordedVideo = { id, blob, date, time, duration, thumbnail };
+    await db.put('videos', newVideo);
+
+    // Обновляем состояние списка видео
+    const updatedVideos = [...this.videosSubject.value, newVideo];
+    this.videosSubject.next(updatedVideos);
+
     return id;
   }
 
@@ -78,5 +95,9 @@ export class VideoStorageService {
   async deleteVideo(id: number): Promise<void> {
     const db = await this.dbPromise;
     await db.delete('videos', id);
+
+    // Убираем удаленное видео из списка
+    const updatedVideos = this.videosSubject.value.filter(video => video.id !== id);
+    this.videosSubject.next(updatedVideos);
   }
 }

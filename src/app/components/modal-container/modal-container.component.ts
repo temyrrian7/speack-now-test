@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
 import { ModalService } from '../../services/modal.service';
@@ -14,7 +14,18 @@ export class VideoModalComponent {
   private readonly modalService = inject(ModalService);
 
   @ViewChild('videoPlayer') videoPlayer!: ElementRef<HTMLVideoElement>;
-  @Input() videoSrc!: string; // Теперь видео передаётся из родителя
+
+  @Input() videoSrc!: string;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === ' ') {
+      event.preventDefault();
+      this.togglePlay();
+    } else if (event.key === 'Escape') {
+      this.closeModal();
+    }
+  }
 
   isPlaying = false;
   progress = 0;
@@ -59,21 +70,19 @@ export class VideoModalComponent {
   closeModal(event?: Event) {
     if (event) event.stopPropagation();
 
-    // Останавливаем воспроизведение
     this.isPlaying = false;
     this.videoPlayer.nativeElement.pause();
 
-    // Сбрасываем текущую позицию видео
     this.videoPlayer.nativeElement.currentTime = 0;
-
-    // Закрываем модалку через сервис
     this.modalService.close();
   }
 
   formatTime(seconds: number): string {
     if (!seconds || isNaN(seconds)) return '00:00';
+
     const minutes = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
+
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
   }
 }

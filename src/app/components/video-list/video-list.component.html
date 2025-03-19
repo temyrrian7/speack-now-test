@@ -1,5 +1,5 @@
 <div class="video-list">
-  <div *ngFor="let video of videos" class="video-item" (click)="openModal(video)">
+  <div *ngFor="let video of videos$ | async" class="video-item" (click)="openModal(video)">
     <img [src]="video.thumbnail" alt="Video thumbnail"/>
     <div class="video-info">
       <span>{{ video.date }}</span>
@@ -14,11 +14,9 @@
       [size]="20"
     />
   </div>
-
-  <!-- Плейсхолдер, если нет видео -->
 </div>
 
-<div *ngIf="videos.length === 0" class="placeholder">
+<div *ngIf="(videos$ | async)?.length === 0" class="placeholder">
   <app-icon name="video-camera" [size]="40"/>
-  <p>No videos recorded yet</p>
+  <span>There are no recorded videos yet</span>
 </div>

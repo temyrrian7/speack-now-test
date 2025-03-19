@@ -18,17 +18,18 @@ import { RecordButtonComponent } from '../record-button/record-button.component'
   imports: [CommonModule, VideoQualitySelectorComponent, VideoListComponent, RecordButtonComponent],
   standalone: true,
 })
-export class RootComponentComponent implements OnInit, AfterViewInit {
-  @ViewChild('recordingVideo') recordingVideo!: ElementRef<HTMLVideoElement>;
-
+export class RootComponentComponent implements OnInit {
   private bandwidthService = inject(BandwidthService);
   private webcamService = inject(WebcamService);
   private videoStorage = inject(VideoStorageService);
   private store = inject(Store);
 
+  @ViewChild('recordingVideo') recordingVideo!: ElementRef<HTMLVideoElement>;
+
   quality$: Observable<Quality> = this.store.select(VideoSettingsState.quality);
   recording = false;
   recordStartTime = 0;
+
   private mediaStream!: MediaStream;
 
   ngOnInit() {
@@ -47,40 +48,25 @@ export class RootComponentComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    // Убеждаемся, что `recordingVideo` инициализирован
-    if (!this.recordingVideo) {
-      console.error('Ошибка: recordingVideo не найден!');
-    }
-  }
-
   async startRecording() {
     const quality = await firstValueFrom(this.quality$);
-
-    // Проверяем, есть ли `recordingVideo`
-    if (!this.recordingVideo?.nativeElement) {
-      console.error('Ошибка: recordingVideo не инициализирован!');
-      return;
-    }
 
     await this.webcamService.startRecording(quality);
     this.recording = true;
     this.recordStartTime = Date.now();
 
-    // Получаем поток видео
     try {
       this.mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
       this.recordingVideo.nativeElement.srcObject = this.mediaStream;
-      this.recordingVideo.nativeElement.play();
+      await this.recordingVideo.nativeElement.play();
     } catch (error) {
-      console.error("Ошибка доступа к камере:", error);
+      alert("Ошибка доступа к камере:" + error);
       return;
     }
 
     timer(10000).subscribe(async () => {
       if (this.recording) {
         await this.stopRecording();
-        console.log('Auto stopped and saved.');
       }
     });
   }
@@ -88,14 +74,11 @@ export class RootComponentComponent implements OnInit, AfterViewInit {
   async stopRecording() {
     if (this.recording) {
       const videoBlob = await this.webcamService.stopRecording();
-
-      // Вычисляем реальную длительность записи
       const duration = Math.floor((Date.now() - this.recordStartTime) / 1000);
 
       await this.videoStorage.saveVideo(videoBlob, duration);
       this.recording = false;
 
-      // Останавливаем камеру
       if (this.mediaStream) {
         this.mediaStream.getTracks().forEach(track => track.stop());
       }
@@ -103,8 +86,6 @@ export class RootComponentComponent implements OnInit, AfterViewInit {
       if (this.recordingVideo?.nativeElement) {
         this.recordingVideo.nativeElement.srcObject = null;
       }
-
-      console.log('Видео остановлено вручную и сохранено.');
     }
   }
 }

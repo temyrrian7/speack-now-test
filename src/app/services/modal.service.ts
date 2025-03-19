@@ -1,13 +1,21 @@
-import { Injectable, Injector, ApplicationRef, ComponentRef, createComponent, EmbeddedViewRef } from '@angular/core';
+import {
+  Injectable,
+  ApplicationRef,
+  ComponentRef,
+  createComponent,
+  EmbeddedViewRef,
+  inject
+} from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
+  private appRef = inject(ApplicationRef);
+
   private modalRef?: ComponentRef<any>;
 
-  constructor(private appRef: ApplicationRef, private injector: Injector) {}
-
   open<T>(component: new (...args: any) => T, props?: Partial<T>): void {
-    this.close(); // close if already opened
+    // close if already opened
+    this.close();
 
     this.modalRef = createComponent(component, {
       environmentInjector: this.appRef.injector
