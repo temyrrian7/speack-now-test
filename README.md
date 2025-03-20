@@ -49,4 +49,5 @@ So, decisions I made:
 5) Modals. I made them by myself because I can, but I would use Angular Material in real life project. Alo there is two separate modals component, but better to have modal container and project content inside.
 6) BandwidthService. Probably there is better way to do this.
 7) ```<app-root-component/>``` inside app-component. frankly speaking I don`t know, this is just a habit. There is no many wisdom here, I just like to have app component for really global stuff.
-8) Positions of injects not on the top, yes I know. This is just settings of IDE autoformatting. For now I don`t care about this. But in real project they probably should be at the top of the class__
+8) Positions of injects not on the top, yes I know. This is just settings of IDE autoformatting. For now I don`t care about this. But in real project they probably should be at the top of the class
+9) And tests. I mean, c`mon guys, this is just a test assignment, they are autogenereted. In real life I would to write test for some core functionality and complicated components at least.
