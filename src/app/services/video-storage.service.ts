@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { openDB, IDBPDatabase } from 'idb';
+import { IDBPDatabase, openDB } from 'idb';
 import { RecordedVideo } from '../interfaces/video.interface';
 import { BehaviorSubject } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class VideoStorageService {
-  private dbPromise: Promise<IDBPDatabase>;
+  private readonly dbPromise: Promise<IDBPDatabase>;
   private videosSubject = new BehaviorSubject<RecordedVideo[]>([]);
   videos$ = this.videosSubject.asObservable();
 
@@ -13,18 +13,12 @@ export class VideoStorageService {
     this.dbPromise = openDB('video-recorder-db', 1, {
       upgrade(db) {
         if (!db.objectStoreNames.contains('videos')) {
-          db.createObjectStore('videos', { keyPath: 'id', autoIncrement: true });
+          db.createObjectStore('videos', {keyPath: 'id', autoIncrement: true});
         }
       },
     });
 
     this.loadVideos();
-  }
-
-  private async loadVideos() {
-    const db = await this.dbPromise;
-    const videos = await db.getAll('videos');
-    this.videosSubject.next(videos);
   }
 
   async generateThumbnail(blob: Blob): Promise<string> {
@@ -73,11 +67,11 @@ export class VideoStorageService {
 
     const now = new Date();
     const date = now.toLocaleDateString('de-DE'); // format: 31.01.2025
-    const time = now.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }); // format: 13:30
+    const time = now.toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit'}); // format: 13:30
     const thumbnail = await this.generateThumbnail(blob);
     const id = Date.now();
 
-    const newVideo: RecordedVideo = { id, blob, date, time, duration, thumbnail };
+    const newVideo: RecordedVideo = {id, blob, date, time, duration, thumbnail};
     await db.put('videos', newVideo);
 
     const updatedVideos = [...this.videosSubject.value, newVideo];
@@ -92,5 +86,11 @@ export class VideoStorageService {
 
     const updatedVideos = this.videosSubject.value.filter(video => video.id !== id);
     this.videosSubject.next(updatedVideos);
+  }
+
+  private async loadVideos() {
+    const db = await this.dbPromise;
+    const videos = await db.getAll('videos');
+    this.videosSubject.next(videos);
   }
 }

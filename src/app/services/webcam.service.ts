@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Quality } from '../interfaces/quality.enum';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class WebcamService {
   private mediaRecorder?: MediaRecorder;
   private chunks: Blob[] = [];
@@ -32,7 +32,7 @@ export class WebcamService {
       }
 
       this.mediaRecorder.onstop = () => {
-        const blob = new Blob(this.chunks, { type: 'video/webm' });
+        const blob = new Blob(this.chunks, {type: 'video/webm'});
         this.chunks = [];
         resolve(blob);
       };

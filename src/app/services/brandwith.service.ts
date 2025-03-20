@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class BandwidthService {
   async getBandwidth(): Promise<number> {
     return new Promise((resolve) => {

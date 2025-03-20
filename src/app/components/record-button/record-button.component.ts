@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
 import { IconComponent } from '../icon/icon.component';
-import { interval, Subscription, takeWhile, tap, finalize } from 'rxjs';
+import { finalize, interval, Subscription, takeWhile, tap } from 'rxjs';
 
 @Component({
   selector: 'app-record-button',
@@ -39,7 +39,7 @@ export class RecordButtonComponent implements OnDestroy {
 
   async hasCameraAccess(): Promise<boolean> {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({video: true});
       stream.getTracks().forEach(track => track.stop());
       return true;
     } catch (error) {
